@@ -9,5 +9,13 @@ namespace eBook.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        ICollection<User> Users { get; set; }
+        ICollection<EBook> EBooks { get; set; }
+
+        public Category()
+        {
+
+        }
     }
 }
