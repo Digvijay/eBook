@@ -10,9 +10,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using eBook.Database;
 using eBook.Models;
+using System.Web.Http.Cors;
 
 namespace eBook.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class EBooksController : ApiController
     {
         private EBookDbContext db = new EBookDbContext();

@@ -15,8 +15,8 @@ namespace eBook
 
             routes.MapRoute(
                 name: "Default",
-                url: "",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: ""
+                //defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

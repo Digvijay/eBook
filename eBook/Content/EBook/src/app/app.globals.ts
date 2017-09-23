@@ -1,0 +1,1 @@
+export const ServerURI:string = "http://localhost:30339/";

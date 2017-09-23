@@ -1,0 +1,32 @@
+<div class="example-container mat-elevation-z8">
+  <md-table #table [dataSource]="dataSource">
+
+    <ng-container mdColumnDef="eBookId">
+      <md-header-cell *mdHeaderCellDef> id </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.eBookId}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="title">
+      <md-header-cell *mdHeaderCellDef> title </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.title}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="author">
+      <md-header-cell *mdHeaderCellDef> author </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.author}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="fileName">
+      <md-header-cell *mdHeaderCellDef> fileName </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.fileName}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="mime">
+      <md-header-cell *mdHeaderCellDef> mime </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.mime}} </md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+</div>

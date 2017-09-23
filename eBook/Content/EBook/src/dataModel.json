@@ -1,0 +1,31 @@
+{
+    "EBooks": {
+        "EBookId": { "key": "true" },
+        "Title": { "type": "string", "require": "true", "textArea": "true" },
+        "Author": { "type": "string"},
+        "Keywords": { "type": "string", "textArea": "true"},
+        "PublicationYear": { "type": "integer"},
+        "FileName": { "type": "string", "require": "true" },
+        "MIME": { "type": "string" },
+        "CategoryId": { "referent": "Categories", "render": "CategoryName" },
+        "LanguageId": { "referent": "Languages", "render": "LanguageName" }
+    },
+    "Users": {
+        "UserId": { "key": "true" },
+        "FirstName": { "type": "string", "require": "true" },
+        "LastName": { "type": "string", "require": "true" },
+        "UserName": { "type": "string", "require": "true" },
+        "UserPassword": {"type": "string", "require": "true" },
+        "Type": {"type": "string", "require": "true" },
+        "CategoryId": { "referent": "Categories", "render": "CategoryName" }
+    },
+    "Categories": {
+        "CategoryId": { "key": "true" },
+        "CategoryName": { "type": "string", "require": "true" }
+    },
+    "Languages": {
+        "LanguageId": { "key": "true" },
+        "LanguageName": { "type": "string", "require": "true" }
+    },
+    "relativeURI": "/api"
+}
