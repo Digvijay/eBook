@@ -1,11 +1,14 @@
 namespace eBook.Migrations
 {
     using Models;
+    using Newtonsoft.Json;
     using Services;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Data.Entity.Validation;
+    using System.IO;
     using System.Linq;
     using System.Text;
     internal sealed class Configuration : DbMigrationsConfiguration<eBook.Database.EBookDbContext>
@@ -17,49 +20,84 @@ namespace eBook.Migrations
 
         protected override void Seed(eBook.Database.EBookDbContext context)
         {
-            var cat1 = new Category() { CategoryId = 1, CategoryName = "Cat1" };
-            var cat2 = new Category() { CategoryId = 2, CategoryName = "Cat2" };
+            var categoriesMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/CATEGORIES_MOCK_DATA.json");
+            List<Category> categories = new List<Category>(100);
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\CATEGORIES_MOCK_DATA.json"))    // TODO: change to relative path
+            {
+                string json = r.ReadToEnd();
+                categories = JsonConvert.DeserializeObject<List<Category>>(json);
 
-            context.Categories.AddOrUpdate(
-                p => p.CategoryId,
-                cat1,
-                cat2    
-            );
+                foreach (var category in categories)
+                {
+                    if (category.CategoryName.Count() > 25)
+                    {
+                        category.CategoryName = category.CategoryName.Substring(0, 25);
+                    }
+                }
+            }
+            context.Categories.AddOrUpdate(p => p.CategoryId, categories.ToArray());
 
-            var lang1 = new Language() { LanguageId = 1, LanguageName = "Eng" };
-            var lang2 = new Language() { LanguageId = 2, LanguageName = "Fra" };
-            var lang3 = new Language() { LanguageId = 1, LanguageName = "Srb" };
+            var usersMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/USERS_MOCK_DATA.json");
+            List<User> users = new List<User>(100);
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\USERS_MOCK_DATA.json"))         // TODO: change to relative path
+            {
+                string json = r.ReadToEnd();
+                users = JsonConvert.DeserializeObject<List<User>>(json);
 
-            context.Languages.AddOrUpdate(
-                p => p.LanguageId,
-                lang1,
-                lang2,
-                lang3
-            );
+                foreach (var user in users)
+                {
+                    user.Category = categories[(new Random().Next(0, categories.Count))];
+                    user.Type = "subscriber";
 
-            var user1 = new User() { UserId = 1, FirstName = "Aleksandar", LastName = "Bosnjak", Type = "admin", UserName = "abos", UserPassword = AuthService.GetEncodedHash("abos", "123") };
-            var user2 = new User() { UserId = 2, FirstName = "Elvis", LastName = "Presley", Type = "moderator", UserName = "elvis", UserPassword = AuthService.GetEncodedHash("elvis", "123") };
+                    if(user.UserPassword.Count() > 10)
+                    {
+                        user.UserPassword = user.UserPassword.Substring(0, 9);
+                    }
 
-            context.Users.AddOrUpdate(
-                p => p.UserId,
-                user1,
-                user2    
-            );
+                    if (user.UserName.Count() > 10)
+                    {
+                        user.UserName = user.UserName.Substring(0, 9);
+                    }
+                }
+            }
+            context.Users.AddOrUpdate(p => p.UserId, users.ToArray());
 
-            context.EBooks.AddOrUpdate(
-                p => p.EBookId,
-                new EBook() {   EBookId = 1,
-                                FileName = "harry potter and prisoner of askhaban.pdf",
-                                Author = "Jane",
-                                Language = lang1,
-                                Category = cat1,
-                                Keywords = "harry, magic, wizardy, hogwarts",
-                                Title = "Harry Potter and Prisioner of Askhaban",
-                                MIME = "MIME1",
-                                PublicationYear = 2003,
-                                User = user1
-                }    
-            );
+            var languagesMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/LANGUAGES_MOCK_DATA.json");      // TODO: change to relative path
+            List<Language> languages = new List<Language>(100);
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\LANGUAGES_MOCK_DATA.json"))
+            {
+                string json = r.ReadToEnd();
+                languages = JsonConvert.DeserializeObject<List<Language>>(json);
+            }
+            context.Languages.AddOrUpdate(p => p.LanguageId, languages.ToArray());
+
+            var eBooksMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/EBOOKS_MOCK_DATA.json");            // TODO: change to relative path
+            List<EBook> eBooks = new List<EBook>(100);
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\EBOOKS_MOCK_DATA.json"))
+            {
+                string json = r.ReadToEnd();
+                eBooks = JsonConvert.DeserializeObject<List<EBook>>(json);
+
+                foreach (var eBook in eBooks)
+                {
+                    eBook.Category = categories[new Random().Next(0, categories.Count)];
+                    eBook.Language = languages[new Random().Next(0, languages.Count)];
+                    eBook.User = users[new Random().Next(0, users.Count)];
+                    eBook.FileName = eBook.FileName.Remove(eBook.FileName.LastIndexOf('.')) + ".pdf";
+                    eBook.MIME = "application/pdf";
+
+                    if(eBook.Title.Count() > 75)
+                    {
+                        eBook.Title = eBook.Title.Substring(0, 75);
+                    }
+
+                    if(eBook.Keywords.Count() > 110)
+                    {
+                        eBook.Keywords = eBook.Keywords.Substring(0, 110);
+                    }
+                }
+            }
+            context.EBooks.AddOrUpdate(p => p.EBookId, eBooks.ToArray());
 
             SaveChanges(context);
         }

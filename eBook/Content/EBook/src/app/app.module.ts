@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MatTabsModule, MatInputModule, MatTableModule } from '@angular/material';
+import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MatTabsModule, MatInputModule, MatTableModule, MatPaginatorModule } from '@angular/material';
 import { HttpModule } from '@angular/http';
 
 import 'hammerjs';
@@ -54,14 +54,15 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only, TODO: remove after..
     ),
     BrowserAnimationsModule,
-    MdButtonModule, // Add material components to imports array
+    MdButtonModule,
     MdCardModule,
     MdMenuModule,
     MdToolbarModule,
     MdIconModule,
     MatTabsModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [EBookService],
   bootstrap: [AppComponent]

@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using eBook.Database;
 using eBook.Models;
+using System.Web.Http.OData;
 
 namespace eBook.Controllers
 {
@@ -18,6 +19,7 @@ namespace eBook.Controllers
         private EBookDbContext db = new EBookDbContext();
 
         // GET: api/Languages
+        [EnableQuery]
         public IQueryable<Language> GetLanguages()
         {
             return db.Languages;

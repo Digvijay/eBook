@@ -1,7 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ViewChild, OnInit} from '@angular/core';
 import {DataSource} from '@angular/cdk/collections';
+import {MdPaginator} from '@angular/material';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
 
 import { EBook } from 'app/ebook/main/ebook.model';
 import { EBookService } from 'app/ebook/main/ebook.service';
@@ -13,52 +17,62 @@ import { EBookService } from 'app/ebook/main/ebook.service';
 })
 export class EBookListComponent implements OnInit {
 
-  private eBooks: Array<EBook>;
-  private dataSource:ExampleDataSource;
-
+  eBooks: Array<EBook>;  
   displayedColumns = ['eBookId', 'title', 'author', 'fileName', 'mime'];
+  dataChange: BehaviorSubject<IEBook[]> = new BehaviorSubject<IEBook[]>([]);  
+  dataSource: ExampleDataSource | null;
   
+  @ViewChild(MdPaginator) paginator: MdPaginator;
+
   constructor(private eBookService: EBookService) { }
 
   ngOnInit() {
     this.getEBooks(x => {
-      this.dataSource = new ExampleDataSource(this.eBooks);
+      this.dataChange.next(this.eBooks);
     });
+
+    this.dataSource = new ExampleDataSource(this, this.paginator);
   }
 
-  getEBooks(callback):void {
+  getEBooks(callback): void {
     this.eBookService
       .getEBooks()
-      .then(x => { this.eBooks = x; callback()});
+      .then(x => { this.eBooks = x; callback() });
   }
 
 }
 export interface IEBook {
-  eBookId:number;
-  title:string;
-  author:string;
+  eBookId: number;
+  title: string;
+  author: string;
   categoryId: number;
-  fileName:string;
-  keywords:string;
+  fileName: string;
+  keywords: string;
   mime: string;
-  publicationYear:number;
-  userId:number;
+  publicationYear: number;
+  userId: number;
 }
 
-/**
- * Data source to provide what data should be rendered in the table. The observable provided
- * in connect should emit exactly the data that should be rendered by the table. If the data is
- * altered, the observable should emit that new set of data on the stream. In our case here,
- * we return a stream that contains only one set of data that doesn't change.
- */
 export class ExampleDataSource extends DataSource<any> {
-  constructor (private data:any) {
+  constructor(private _eBooksComponent: EBookListComponent, private _paginator: MdPaginator) {
     super();
   }
+
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<IEBook[]> {
-    return Observable.of(this.data);
+    const displayDataChanges = [
+      this._eBooksComponent.dataChange,
+      this._paginator.page,
+    ];
+
+    return Observable.merge(...displayDataChanges).map(() => {
+      const data = this._eBooksComponent.dataChange.value.slice();
+
+      // Grab the page's slice of data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      return data.splice(startIndex, this._paginator.pageSize);
+    });
   }
 
-  disconnect() {}
+  disconnect() { }
 }

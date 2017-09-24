@@ -202,6 +202,10 @@
     <Compile Include="Migrations\201709091934433_Init.Designer.cs">
       <DependentUpon>201709091934433_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709241249418_realSeed.cs" />
+    <Compile Include="Migrations\201709241249418_realSeed.Designer.cs">
+      <DependentUpon>201709241249418_realSeed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\EBook.cs" />
@@ -271,6 +275,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201709091934433_Init.resx">
       <DependentUpon>201709091934433_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709241249418_realSeed.resx">
+      <DependentUpon>201709241249418_realSeed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

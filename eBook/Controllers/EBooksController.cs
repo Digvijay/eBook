@@ -11,15 +11,18 @@ using System.Web.Http.Description;
 using eBook.Database;
 using eBook.Models;
 using System.Web.Http.Cors;
+using System.Web.Http.OData;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace eBook.Controllers
 {
-    [EnableCors("*", "*", "*")]
     public class EBooksController : ApiController
     {
         private EBookDbContext db = new EBookDbContext();
 
         // GET: api/EBooks
+        [EnableQuery]
         public IQueryable<EBook> GetEBooks()
         {
             return db.EBooks;
