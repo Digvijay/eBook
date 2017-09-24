@@ -46,7 +46,7 @@ namespace eBook.Migrations
 
                 foreach (var user in users)
                 {
-                    user.Category = categories[(new Random().Next(0, categories.Count))];
+                    user.Category = categories[(new Random(DateTime.Now.Millisecond).Next(0, categories.Count))];
                     user.Type = "subscriber";
 
                     if(user.UserPassword.Count() > 10)
@@ -80,9 +80,9 @@ namespace eBook.Migrations
 
                 foreach (var eBook in eBooks)
                 {
-                    eBook.Category = categories[new Random().Next(0, categories.Count)];
-                    eBook.Language = languages[new Random().Next(0, languages.Count)];
-                    eBook.User = users[new Random().Next(0, users.Count)];
+                    eBook.Category = categories[new Random(DateTime.Now.Millisecond).Next(0, categories.Count)];
+                    eBook.Language = languages[new Random(DateTime.Now.Millisecond).Next(0, languages.Count)];
+                    eBook.User = users[new Random(DateTime.Now.Millisecond).Next(0, users.Count)];
                     eBook.FileName = eBook.FileName.Remove(eBook.FileName.LastIndexOf('.')) + ".pdf";
                     eBook.MIME = "application/pdf";
 

@@ -15,15 +15,33 @@
       <md-header-cell *mdHeaderCellDef> author </md-header-cell>
       <md-cell *mdCellDef="let element"> {{element.author}} </md-cell>
     </ng-container>
+    
+    <ng-container mdColumnDef="language">
+      <md-header-cell *mdHeaderCellDef> language </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.language.languageName}} </md-cell>
+    </ng-container>
+    
+    <ng-container mdColumnDef="category">
+      <md-header-cell *mdHeaderCellDef> category </md-header-cell>
+      <md-cell *mdCellDef="let element"> {{element.category.categoryName}} </md-cell>
+    </ng-container>
 
-    <ng-container mdColumnDef="fileName">
-      <md-header-cell *mdHeaderCellDef> fileName </md-header-cell>
+    <ng-container mdColumnDef="file name">
+      <md-header-cell *mdHeaderCellDef> file name </md-header-cell>
       <md-cell *mdCellDef="let element"> {{element.fileName}} </md-cell>
     </ng-container>
 
     <ng-container mdColumnDef="mime">
       <md-header-cell *mdHeaderCellDef> mime </md-header-cell>
       <md-cell *mdCellDef="let element"> {{element.mime}} </md-cell>
+    </ng-container>
+
+    <ng-container mdColumnDef="edit">
+        <md-header-cell *mdHeaderCellDef> EDIT </md-header-cell>
+        <md-cell *mdCellDef="let element"> 
+          <a [routerLink]="['/ebooks', element.eBookId, 'edit']">edit</a> | 
+          <a [routerLink]="['/ebooks', element.eBookId, 'delete']">delete</a>
+        </md-cell>
     </ng-container>
 
     <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>

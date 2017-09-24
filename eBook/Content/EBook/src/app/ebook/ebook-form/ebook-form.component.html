@@ -1,52 +1,90 @@
 <md-card>
-  <form class="example-form">
+  <form #values="ngForm" (ngSubmit)="submit(values)" class="example-form">
     <md-form-field class="example-full-width">
-      <input mdInput placeholder="Company (disabled)" disabled value="Google">
+      <textarea mdInput [(ngModel)]="eBook.title" name="title" minlength="2" maxlength="80" placeholder="Title"></textarea>
     </md-form-field>
 
     <table class="example-full-width" cellspacing="0">
       <tr>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput placeholder="First name">
+            <input mdInput [(ngModel)]="eBook.author" name="author" placeholder="Author" minlength="1" maxlength="120">
           </md-form-field>
         </td>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput placeholder="Long Last Name That Will Be Truncated">
+            <input mdInput [(ngModel)]="eBook.publicationYear" name="publicationYear" placeholder="Publication year" type="number" minlength="2"
+              maxlength="4">
           </md-form-field>
         </td>
       </tr>
-    </table>
-
-    <p>
-      <md-form-field class="example-full-width">
-        <textarea mdInput placeholder="Address">1600 Amphitheatre Pkwy</textarea>
-      </md-form-field>
-      <md-form-field class="example-full-width">
-        <textarea mdInput placeholder="Address 2"></textarea>
-      </md-form-field>
-    </p>
-
-    <table class="example-full-width" cellspacing="0">
       <tr>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput placeholder="City">
+            <input mdInput type="text" name="category" placeholder="Category" mdInput [mdAutocomplete]="catSelect" [(ngModel)]="eBook.category">
+            <md-autocomplete id="categories" #catSelect="mdAutocomplete" [displayWith]="displaySelectCategoryFun">
+              <md-option *ngFor="let category of categories" [value]="category">
+                {{ category.categoryName }}
+              </md-option>
+            </md-autocomplete>
           </md-form-field>
         </td>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput placeholder="State">
-          </md-form-field>
-        </td>
-        <td>
-          <md-form-field class="example-full-width">
-            <input mdInput #postalCode maxlength="5" placeholder="Postal Code" value="94043">
-            <md-hint align="end">{{postalCode.value.length}} / 5</md-hint>
+            <input mdInput type="text" name="language" placeholder="Language" mdInput [mdAutocomplete]="langSelect" [(ngModel)]="eBook.language">
+            <md-autocomplete id="languages" #langSelect="mdAutocomplete" [displayWith]="displaySelectLanguageFun">
+              <md-option *ngFor="let language of languages" [value]="language">
+                {{ language.languageName }}
+              </md-option>
+            </md-autocomplete>
           </md-form-field>
         </td>
       </tr>
+      <tr>
+        <td><!-- *ngIf="action == 'edit'" -->
+          <md-form-field class="example-full-width">
+            <input mdInput type="text" name="user" placeholder="Added by user" mdInput [mdAutocomplete]="userSelect" [(ngModel)]="eBook.user">
+            <md-autocomplete id="languages" #userSelect="mdAutocomplete" [displayWith]="displaySelectUserFun">
+              <md-option *ngFor="let user of users" [value]="user">
+                {{ user.firstName }} {{user.lastName}}
+              </md-option>
+            </md-autocomplete>
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <md-form-field class="example-full-width">
+            <textarea mdInput [(ngModel)]="eBook.fileName" name="fileName" disabled placeholder="File name"></textarea>
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <md-form-field class="example-full-width">
+            <textarea mdInput [(ngModel)]="eBook.keywords" name="keywords" disabled placeholder="Keywords"></textarea>
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput [(ngModel)]="eBook.mime" name="mime" disabled placeholder="MIME" />
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <app-fileupload></app-fileupload>
+        </td>
+        <td>
+          <button md-button routerLink="/ebooks/list">Cancel</button>
+        </td>
+        <td>
+          <button md-button type="submit">Save</button>
+        </td>
+      </tr>
     </table>
+
   </form>
 </md-card>

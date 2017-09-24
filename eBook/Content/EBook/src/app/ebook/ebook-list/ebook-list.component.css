@@ -17,3 +17,7 @@
     overflow: auto;
     max-height: 500px;
   }
+
+  a {
+      color: #c2185b;
+  }

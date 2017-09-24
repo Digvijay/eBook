@@ -18,7 +18,7 @@ import { EBookService } from 'app/ebook/main/ebook.service';
 export class EBookListComponent implements OnInit {
 
   eBooks: Array<EBook>;  
-  displayedColumns = ['eBookId', 'title', 'author', 'fileName', 'mime'];
+  displayedColumns = ['eBookId', 'title', 'author', 'language', 'file name', 'category', 'mime', 'edit'];
   dataChange: BehaviorSubject<IEBook[]> = new BehaviorSubject<IEBook[]>([]);  
   dataSource: ExampleDataSource | null;
   

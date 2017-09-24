@@ -2,51 +2,51 @@ import { Injectable } from '@angular/core';
 
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 
-import { EBook } from 'app/ebook/main/ebook.model';
+import { Category } from 'app/category/main/category.model';
 import { ServerURI } from 'app/app.globals';
 
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class EBookService {
+export class CategoryService {
 
   constructor(private http: Http) { 
   }
 
-  private eBooksUrl = 'api/ebooks/';  // URL to web api
+  private categoriesUrl = 'api/categories/';  // URL to web api
   private headers = new Headers({'Content-Type': 'application/json', 'Accept': 'application/json'});
   private opts:RequestOptions = new RequestOptions();
   
   
-  getEBooks(): Promise<Array<EBook>> {
+  getCategories(): Promise<Array<Category>> {
     this.opts.headers = this.headers;
     
     return this.http
-      .get(ServerURI + this.eBooksUrl, this.opts)
+      .get(ServerURI + this.categoriesUrl, this.opts)
       .toPromise()
       .then((response) => {
-        return response.json() as Array<EBook>[];
+        return response.json() as Array<Category>[];
       })
       .catch(this.handleError);
   }
   
-  getEBook(id: number): Promise<EBook> {
-    return this.getEBooks()
-      .then(eBooks => eBooks.find(eBook => eBook.eBookId === id));
+  getCategory(id: number): Promise<Category> {
+    return this.getCategories()
+      .then(Categories => Categories.find(Category => Category.categoryId === id));
   }
 
-  save(eBook: EBook): Promise<EBook> {
-    if (eBook.eBookId) {
-      return this.put(eBook);
+  save(Category: Category): Promise<Category> {
+    if (Category.categoryId) {
+      return this.put(Category);
     }
-    return this.post(eBook);
+    return this.post(Category);
   }
 
-  delete(eBookId: number): Promise<Response> {
+  delete(Category: Category): Promise<Response> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    const url = `${ServerURI}${this.eBooksUrl}${eBookId}`;
+    const url = `${ServerURI}${this.categoriesUrl}${Category.categoryId}`;
 
     return this.http
       .delete(url, { headers: headers })
@@ -54,30 +54,30 @@ export class EBookService {
       .catch(this.handleError);
   }
 
-  // Add new EBook
-  private post(eBook: EBook): Promise<EBook> {
+  // Add new Category
+  private post(Category: Category): Promise<Category> {
     const headers = new Headers({
       'Content-Type': 'application/json'
     });
 
     return this.http
-      .post(ServerURI + this.eBooksUrl, JSON.stringify(eBook), { headers: headers })
+      .post(ServerURI + this.categoriesUrl, JSON.stringify(Category), { headers: headers })
       .toPromise()
       .then(res => res.json().data)
       .catch(this.handleError);
   }
 
-  // Update existing EBook
-  private put(eBook: EBook): Promise<EBook> {
+  // Update existing Category
+  private put(Category: Category): Promise<Category> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    const url = `${ServerURI}${this.eBooksUrl}${eBook.eBookId}`;
+    const url = `${ServerURI}${this.categoriesUrl}${Category.categoryId}`;
 
     return this.http
-      .put(url, JSON.stringify(eBook), { headers: headers })
+      .put(url, JSON.stringify(Category), { headers: headers })
       .toPromise()
-      .then(() => eBook)
+      .then(() => Category)
       .catch(this.handleError);
   }
 

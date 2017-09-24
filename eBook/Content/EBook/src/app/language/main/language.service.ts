@@ -2,51 +2,51 @@ import { Injectable } from '@angular/core';
 
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 
-import { EBook } from 'app/ebook/main/ebook.model';
+import { Language } from 'app/language/main/language.model';
 import { ServerURI } from 'app/app.globals';
 
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class EBookService {
+export class LanguageService {
 
   constructor(private http: Http) { 
   }
 
-  private eBooksUrl = 'api/ebooks/';  // URL to web api
+  private languagesUrl = 'api/languages/';  // URL to web api
   private headers = new Headers({'Content-Type': 'application/json', 'Accept': 'application/json'});
   private opts:RequestOptions = new RequestOptions();
   
   
-  getEBooks(): Promise<Array<EBook>> {
+  getLanguages(): Promise<Array<Language>> {
     this.opts.headers = this.headers;
     
     return this.http
-      .get(ServerURI + this.eBooksUrl, this.opts)
+      .get(ServerURI + this.languagesUrl, this.opts)
       .toPromise()
       .then((response) => {
-        return response.json() as Array<EBook>[];
+        return response.json() as Array<Language>[];
       })
       .catch(this.handleError);
   }
   
-  getEBook(id: number): Promise<EBook> {
-    return this.getEBooks()
-      .then(eBooks => eBooks.find(eBook => eBook.eBookId === id));
+  getLanguage(id: number): Promise<Language> {
+    return this.getLanguages()
+      .then(Languages => Languages.find(Language => Language.languageId === id));
   }
 
-  save(eBook: EBook): Promise<EBook> {
-    if (eBook.eBookId) {
-      return this.put(eBook);
+  save(Language: Language): Promise<Language> {
+    if (Language.languageId) {
+      return this.put(Language);
     }
-    return this.post(eBook);
+    return this.post(Language);
   }
 
-  delete(eBookId: number): Promise<Response> {
+  delete(Language: Language): Promise<Response> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    const url = `${ServerURI}${this.eBooksUrl}${eBookId}`;
+    const url = `${ServerURI}${this.languagesUrl}${Language.languageId}`;
 
     return this.http
       .delete(url, { headers: headers })
@@ -54,30 +54,30 @@ export class EBookService {
       .catch(this.handleError);
   }
 
-  // Add new EBook
-  private post(eBook: EBook): Promise<EBook> {
+  // Add new Language
+  private post(Language: Language): Promise<Language> {
     const headers = new Headers({
       'Content-Type': 'application/json'
     });
 
     return this.http
-      .post(ServerURI + this.eBooksUrl, JSON.stringify(eBook), { headers: headers })
+      .post(ServerURI + this.languagesUrl, JSON.stringify(Language), { headers: headers })
       .toPromise()
       .then(res => res.json().data)
       .catch(this.handleError);
   }
 
-  // Update existing EBook
-  private put(eBook: EBook): Promise<EBook> {
+  // Update existing Language
+  private put(Language: Language): Promise<Language> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    const url = `${ServerURI}${this.eBooksUrl}${eBook.eBookId}`;
+    const url = `${ServerURI}${this.languagesUrl}${Language.languageId}`;
 
     return this.http
-      .put(url, JSON.stringify(eBook), { headers: headers })
+      .put(url, JSON.stringify(Language), { headers: headers })
       .toPromise()
-      .then(() => eBook)
+      .then(() => Language)
       .catch(this.handleError);
   }
 
