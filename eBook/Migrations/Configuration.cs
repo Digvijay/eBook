@@ -51,10 +51,7 @@ namespace eBook.Migrations
                     user.Category = categories[random.Next(0, categories.Count)];
                     user.Type = "subscriber";
 
-                    if(user.UserPassword.Count() > 10)
-                    {
-                        user.UserPassword = user.UserPassword.Substring(0, 9);
-                    }
+                    user.UserPassword = AuthService.GetEncodedHash("1234", AuthService.SALT);
 
                     if (user.UserName.Count() > 10)
                     {

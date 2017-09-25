@@ -11,9 +11,12 @@ using System.Web.Http.Description;
 using eBook.Database;
 using eBook.Models;
 using System.Web.Http.OData;
+using eBook.CustomAttributes.BasicAuthenticationAttribute;
+using eBook.Services;
 
 namespace eBook.Controllers
 {
+    [BasicAuthentication]
     public class UsersController : ApiController
     {
         private EBookDbContext db = new EBookDbContext();
@@ -54,6 +57,8 @@ namespace eBook.Controllers
 
             db.Entry(user).State = EntityState.Modified;
 
+            SetUserPassword(user);
+
             try
             {
                 db.SaveChanges();
@@ -82,10 +87,17 @@ namespace eBook.Controllers
                 return BadRequest(ModelState);
             }
 
+            SetUserPassword(user);
+
             db.Users.Add(user);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
+        }
+
+        private void SetUserPassword(User user)
+        {
+            user.UserPassword = AuthService.GetEncodedHash(user.UserPassword, AuthService.SALT);
         }
 
         // DELETE: api/Users/5

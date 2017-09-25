@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eBook.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -9,6 +10,15 @@ namespace eBook.Services
 {
     public class AuthService
     {
+        private static EBookDbContext db = new EBookDbContext();
+        public static string SALT = "123";
+
+        public static bool Login(string username, string password)
+        {
+            var pwd = GetEncodedHash(password, SALT);
+            return db.Users.Any(x => x.UserName == username && x.UserPassword == pwd);
+        }
+
         public static string GetEncodedHash(string password, string salt)
         {
             MD5 md5 = new MD5CryptoServiceProvider();
