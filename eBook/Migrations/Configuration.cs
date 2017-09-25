@@ -20,9 +20,11 @@ namespace eBook.Migrations
 
         protected override void Seed(eBook.Database.EBookDbContext context)
         {
+            var random = new Random();
+
             var categoriesMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/CATEGORIES_MOCK_DATA.json");
             List<Category> categories = new List<Category>(100);
-            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\CATEGORIES_MOCK_DATA.json"))    // TODO: change to relative path
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\Seeds\CATEGORIES_MOCK_DATA.json"))    // TODO: change to relative path
             {
                 string json = r.ReadToEnd();
                 categories = JsonConvert.DeserializeObject<List<Category>>(json);
@@ -39,14 +41,14 @@ namespace eBook.Migrations
 
             var usersMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/USERS_MOCK_DATA.json");
             List<User> users = new List<User>(100);
-            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\USERS_MOCK_DATA.json"))         // TODO: change to relative path
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\Seeds\USERS_MOCK_DATA.json"))         // TODO: change to relative path
             {
                 string json = r.ReadToEnd();
                 users = JsonConvert.DeserializeObject<List<User>>(json);
 
                 foreach (var user in users)
                 {
-                    user.Category = categories[(new Random(DateTime.Now.Millisecond).Next(0, categories.Count))];
+                    user.Category = categories[random.Next(0, categories.Count)];
                     user.Type = "subscriber";
 
                     if(user.UserPassword.Count() > 10)
@@ -64,7 +66,7 @@ namespace eBook.Migrations
 
             var languagesMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/LANGUAGES_MOCK_DATA.json");      // TODO: change to relative path
             List<Language> languages = new List<Language>(100);
-            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\LANGUAGES_MOCK_DATA.json"))
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\Seeds\LANGUAGES_MOCK_DATA.json"))
             {
                 string json = r.ReadToEnd();
                 languages = JsonConvert.DeserializeObject<List<Language>>(json);
@@ -73,16 +75,16 @@ namespace eBook.Migrations
 
             var eBooksMockFilePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/EBOOKS_MOCK_DATA.json");            // TODO: change to relative path
             List<EBook> eBooks = new List<EBook>(100);
-            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\EBOOKS_MOCK_DATA.json"))
+            using (StreamReader r = new StreamReader(@"D:\ftn\studije\udd\projekat\eBook\eBook\App_Data\Seeds\EBOOKS_MOCK_DATA.json"))
             {
                 string json = r.ReadToEnd();
                 eBooks = JsonConvert.DeserializeObject<List<EBook>>(json);
 
                 foreach (var eBook in eBooks)
                 {
-                    eBook.Category = categories[new Random(DateTime.Now.Millisecond).Next(0, categories.Count)];
-                    eBook.Language = languages[new Random(DateTime.Now.Millisecond).Next(0, languages.Count)];
-                    eBook.User = users[new Random(DateTime.Now.Millisecond).Next(0, users.Count)];
+                    eBook.Category = categories[random.Next(0, categories.Count)];
+                    eBook.Language = languages[random.Next(0, languages.Count)];
+                    eBook.User = users[random.Next(0, users.Count)];
                     eBook.FileName = eBook.FileName.Remove(eBook.FileName.LastIndexOf('.')) + ".pdf";
                     eBook.MIME = "application/pdf";
 

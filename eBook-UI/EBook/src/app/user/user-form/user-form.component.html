@@ -1,0 +1,58 @@
+<md-card>
+  <md-card-title>
+    <span>{{action}}</span>
+  </md-card-title>
+  <form #values="ngForm" (ngSubmit)="submit(values)" class="example-form">
+    <table>
+      <tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput [(ngModel)]="user.firstName" required name="firstName" minlength="2" maxlength="30" placeholder="first name">
+          </md-form-field>
+        </td>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput [(ngModel)]="user.lastName" required name="lastName" minlength="2" maxlength="30" placeholder="last name">
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput [(ngModel)]="user.userName" required name="userName" minlength="2" maxlength="10" placeholder="username">
+          </md-form-field>
+        </td>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput [(ngModel)]="user.userPassword" required name="userPassword" minlength="2" maxlength="10" placeholder="password">
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput [(ngModel)]="user.type" required name="type" minlength="2" maxlength="30" placeholder="user type">
+          </md-form-field>
+        </td>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput type="text" name="category" required placeholder="category" mdInput [mdAutocomplete]="catSelect" [(ngModel)]="user.category">
+            <md-autocomplete id="categories" #catSelect="mdAutocomplete" [displayWith]="displaySelectUserFun">
+              <md-option *ngFor="let category of categories" [value]="category">
+                {{ category.categoryName }}
+              </md-option>
+            </md-autocomplete>
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button md-button routerLink="/users/list">Cancel</button>
+        </td>
+        <td>
+          <button md-button type="submit">Save</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</md-card>

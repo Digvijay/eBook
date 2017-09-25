@@ -1,0 +1,52 @@
+<md-card>
+  <md-card-header>
+    <span>List of all users</span>
+  </md-card-header>
+  <span>
+      <md-table #table [dataSource]="dataSource">
+        <ng-container mdColumnDef="userId">
+          <md-header-cell *mdHeaderCellDef> id </md-header-cell>
+          <md-cell *mdCellDef="let element"> {{element.userId}} </md-cell>
+        </ng-container>
+
+        <ng-container mdColumnDef="firstName">
+            <md-header-cell *mdHeaderCellDef> first name </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.firstName}} </md-cell>
+        </ng-container>
+
+        <ng-container mdColumnDef="lastName">
+            <md-header-cell *mdHeaderCellDef> last name </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.lastName}} </md-cell>
+        </ng-container>
+
+        <ng-container mdColumnDef="userName">
+            <md-header-cell *mdHeaderCellDef> user name </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.userName}} </md-cell>
+        </ng-container>
+
+        <ng-container mdColumnDef="userType">
+            <md-header-cell *mdHeaderCellDef> user type </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.type}} </md-cell>
+        </ng-container>    
+        
+        <ng-container mdColumnDef="categoryName">
+            <md-header-cell *mdHeaderCellDef> user category </md-header-cell>
+            <md-cell *mdCellDef="let element"> {{element.category.categoryName}} </md-cell>
+        </ng-container> 
+
+        <ng-container mdColumnDef="edit">
+            <md-header-cell *mdHeaderCellDef> EDIT </md-header-cell>
+            <md-cell *mdCellDef="let element"> 
+              <a [routerLink]="['/users', element.userId, 'edit']">edit</a> | 
+              <a [routerLink]="['/users', element.userId, 'delete']">delete</a>
+            </md-cell>
+        </ng-container>
+
+        <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+        <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+      </md-table>
+      
+      <md-paginator #paginator [length]="dataChange.value.length" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+      </md-paginator>
+    </span>
+</md-card>

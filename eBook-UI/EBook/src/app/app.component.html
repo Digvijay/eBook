@@ -1,0 +1,14 @@
+<md-toolbar color="primary">
+    <span routerLink="">E-book repository</span>
+    <span class="example-spacer"></span>
+    <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
+    </md-toolbar>
+    <md-menu #appMenu="mdMenu">
+      <button md-menu-item routerLink="/ebooks/list"> EBooks </button>
+      <button md-menu-item routerLink="/users/list"> Users </button>
+      <button md-menu-item routerLink="/categories/list"> Categories </button>
+      <button md-menu-item routerLink="/languages/list"> Languages </button>      
+  </md-menu>
+<router-outlet></router-outlet>
+
+
