@@ -124,7 +124,7 @@ export class EBookFormComponent implements OnInit {
         this.router.navigate(['/ebooks/list']);
       });
     }).catch(x => {
-      this.snackBar.open(`Unable to save book.`, "Error", { duration: 2000}).afterDismissed().subscribe(() => {
+      this.snackBar.open(`Unable to save book.`, "Error", { duration: 3000}).afterDismissed().subscribe(() => {
         console.log(x);
       });
     });

@@ -66,7 +66,7 @@ export class UserFormComponent implements OnInit {
         this.router.navigate(['/users/list']);
       });
     }).catch(x => {
-      this.snackBar.open(`Unable to delete: ${this.user.firstName} ${this.user.lastName}. It's already been used.`, "Error", { duration: 2000}).afterDismissed().subscribe(() => {
+      this.snackBar.open(`Unable to delete: ${this.user.firstName} ${this.user.lastName}. It's already been used.`, "Error", { duration: 3000}).afterDismissed().subscribe(() => {
         this.router.navigate(['/users/list']);
       });
     });
@@ -79,7 +79,7 @@ export class UserFormComponent implements OnInit {
         this.router.navigate(['/users/list']);
       });
     }).catch(x => {
-      this.snackBar.open(`Server error occured, unable to save changes.`, "Error", { duration: 2000}).afterDismissed().subscribe(() => {
+      this.snackBar.open(`Server error occured, unable to save changes. Try with different user name.`, "Error", { duration: 3000}).afterDismissed().subscribe(() => {
         console.log(x);
       });
     });

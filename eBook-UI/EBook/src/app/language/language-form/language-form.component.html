@@ -1,10 +1,10 @@
 <md-card>
   <md-card-title>
-    <span>Add new</span>
+    <span>{{action}}</span>
   </md-card-title>
   <form #values="ngForm" (ngSubmit)="submit(values)" class="example-form">
     <md-form-field class="example-full-width">
-      <textarea mdInput [(ngModel)]="language.languageName" required name="name" minlength="2" maxlength="80" placeholder="language name"></textarea>
+      <input mdInput [(ngModel)]="language.languageName" required name="name" minlength="2" maxlength="30" placeholder="language name">
     </md-form-field>
     <table>
       <tr>

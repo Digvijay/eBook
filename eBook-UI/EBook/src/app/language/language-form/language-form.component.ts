@@ -57,7 +57,7 @@ export class LanguageFormComponent implements OnInit {
         this.router.navigate(['/languages/list']);
       });
     }).catch(x => {
-      this.snackBar.open(`Unable to delete: ${this.language.languageName}. It's already been used.`, "Error", { duration: 2000}).afterDismissed().subscribe(() => {
+      this.snackBar.open(`Unable to delete: ${this.language.languageName}. It's already been used.`, "Error", { duration: 3000}).afterDismissed().subscribe(() => {
         this.router.navigate(['/languages/list']);
       });
     });
