@@ -22,6 +22,7 @@ namespace eBook.Models
         public string LastName { get; set; }
 
         [Required]
+        [Index("UserNameIndex", IsUnique = true)]
         [StringLength(10)]
         public string UserName { get; set; }
 

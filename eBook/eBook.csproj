@@ -207,6 +207,10 @@
     <Compile Include="Migrations\201709241249418_realSeed.Designer.cs">
       <DependentUpon>201709241249418_realSeed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709251552281_uniqueUsername.cs" />
+    <Compile Include="Migrations\201709251552281_uniqueUsername.Designer.cs">
+      <DependentUpon>201709251552281_uniqueUsername.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\EBook.cs" />
@@ -283,6 +287,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709241249418_realSeed.resx">
       <DependentUpon>201709241249418_realSeed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709251552281_uniqueUsername.resx">
+      <DependentUpon>201709251552281_uniqueUsername.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
