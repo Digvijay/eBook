@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MatTabsModule, MatInputModule, MatTableModule, MatPaginatorModule, MatAutocompleteModule, MatSnackBarModule } from '@angular/material';
-import { HttpModule } from '@angular/http';
+import { HttpModule, RequestOptions } from '@angular/http';
 import { FormsModule }   from '@angular/forms'; // <-- NgModel lives here :)
 import { FileDropDirective, FileSelectDirective } from 'ng2-file-upload';
+
 
 import 'hammerjs';
 
@@ -25,11 +26,15 @@ import { EBookListComponent } from './ebook/ebook-list/ebook-list.component';
 import { CategoryListComponent } from './category/category-list/category-list.component';
 import { LanguageListComponent } from './language/language-list/language-list.component';
 import { UserListComponent } from './user/user-list/user-list.component';
+import { AuthComponent } from './common/auth/auth.component';
 
 import { EBookService } from 'app/ebook/main/ebook.service';
 import { LanguageService } from 'app/language/main/language.service';
 import { CategoryService } from 'app/category/main/category.service';
 import { UserService } from 'app/user/main/user.service';
+import { RequestOptionsService } from 'app/common/auth/request-options.service';
+import { AuthService } from 'app/common/auth/auth.service';
+
 
 
 const ChildRoutesEBooks = [
@@ -69,6 +74,7 @@ const appRoutes: Routes = [
   { path: 'categories',         component: CategoryComponent, children: ChildRoutesCategories },
   { path: 'users',              component: UserComponent, children: ChildRoutesUsers },
   { path: 'ebooks',             component: EBookComponent , children: ChildRoutesEBooks},
+  { path: 'login',              component: AuthComponent},
   { path: '',
     redirectTo: '/ebooks/list',
     pathMatch: 'full'
@@ -91,7 +97,8 @@ const appRoutes: Routes = [
     LanguageListComponent,
     LanguageFormComponent,
     UserListComponent,
-    UserFormComponent    
+    UserFormComponent,
+    AuthComponent    
   ],
   imports: [
     BrowserModule,
@@ -118,7 +125,9 @@ const appRoutes: Routes = [
     EBookService, 
     LanguageService,
     CategoryService,
-    UserService
+    UserService,
+    { provide: RequestOptions, useClass: RequestOptionsService },
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

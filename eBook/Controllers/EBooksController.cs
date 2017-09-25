@@ -14,9 +14,11 @@ using System.Web.Http.Cors;
 using System.Web.Http.OData;
 using System.IO;
 using Newtonsoft.Json;
+using eBook.CustomAttributes.BasicAuthenticationAttribute;
 
 namespace eBook.Controllers
 {
+    [BasicAuthentication]
     public class EBooksController : ApiController
     {
         private EBookDbContext db = new EBookDbContext();

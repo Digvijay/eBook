@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eBook.CustomAttributes.BasicAuthenticationAttribute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,7 @@ using System.Web.Http;
 
 namespace eBook.Controllers
 {
+    [BasicAuthentication]
     public class FileUploadController : ApiController
     {
         [HttpPost]

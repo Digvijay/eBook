@@ -1,0 +1,12 @@
+<md-card>
+  <md-card-title> Login </md-card-title>
+  <form name='form-login' (ngSubmit)="login(userName, userPassword)" class="example-form">
+    <md-form-field class="example-full-width">
+      <input mdInput type="text" required id="username" [(ngModel)]="userName" name="username" placeholder="Username" minlength="2" maxlength="30" />
+    </md-form-field>
+    <md-form-field class="example-full-width">
+      <input mdInput type="password" required id="password" [(ngModel)]="userPassword" name="password" placeholder="Password" minlength="2" maxlength="10"/>
+    </md-form-field>
+    <button md-button type="submit">Sign in</button>
+  </form>
+</md-card>

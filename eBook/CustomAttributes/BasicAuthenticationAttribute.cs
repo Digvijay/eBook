@@ -36,7 +36,7 @@ namespace eBook.CustomAttributes
                     string username = usernamePasswordArray[0];
                     string password = usernamePasswordArray[1];
 
-                    if (AuthService.Login(username, password))
+                    if (AuthService.Login(username, password) != null)
                     {
                         Thread.CurrentPrincipal = new GenericPrincipal(
                             new GenericIdentity(username), null);

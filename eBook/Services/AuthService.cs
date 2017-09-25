@@ -1,4 +1,5 @@
 ﻿using eBook.Database;
+using eBook.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,13 @@ namespace eBook.Services
         private static EBookDbContext db = new EBookDbContext();
         public static string SALT = "123";
 
-        public static bool Login(string username, string password)
+        public static User Login(string username, string password)
         {
             var pwd = GetEncodedHash(password, SALT);
-            return db.Users.Any(x => x.UserName == username && x.UserPassword == pwd);
+            var signedInUser = db.Users.Where(x => x.UserName == username && x.UserPassword == pwd).First();
+            signedInUser.UserPassword = password;
+
+            return signedInUser;
         }
 
         public static string GetEncodedHash(string password, string salt)
