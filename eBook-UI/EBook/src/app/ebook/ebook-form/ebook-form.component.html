@@ -47,18 +47,6 @@
         </td>
       </tr>
       <tr>
-        <td><!-- *ngIf="action == 'edit'" -->
-          <md-form-field class="example-full-width">
-            <input mdInput type="text" name="user" required placeholder="Added by user" mdInput [mdAutocomplete]="userSelect" [(ngModel)]="eBook.user">
-            <md-autocomplete id="languages" #userSelect="mdAutocomplete" [displayWith]="displaySelectUserFun">
-              <md-option *ngFor="let user of users" [value]="user">
-                {{ user.firstName }} {{user.lastName}}
-              </md-option>
-            </md-autocomplete>
-          </md-form-field>
-        </td>
-      </tr>
-      <tr>
         <td colspan="2">
           <md-form-field class="example-full-width">
             <textarea mdInput [(ngModel)]="eBook.fileName" name="fileName" disabled placeholder="File name"></textarea>

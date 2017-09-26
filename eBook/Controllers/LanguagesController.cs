@@ -15,7 +15,6 @@ using eBook.CustomAttributes.BasicAuthenticationAttribute;
 
 namespace eBook.Controllers
 {
-    [BasicAuthentication]
     public class LanguagesController : ApiController
     {
         private EBookDbContext db = new EBookDbContext();

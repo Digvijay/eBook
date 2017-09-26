@@ -9,11 +9,10 @@ using System.Web.Http;
 
 namespace eBook.Controllers
 {
-    [BasicAuthentication]
     public class FileUploadController : ApiController
     {
         [HttpPost]
-        public HttpResponseMessage UploadJsonFile()
+        public HttpResponseMessage UploadFile()
         {
             HttpResponseMessage response = new HttpResponseMessage();
             var httpRequest = HttpContext.Current.Request;

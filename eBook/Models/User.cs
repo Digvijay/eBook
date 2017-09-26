@@ -27,7 +27,7 @@ namespace eBook.Models
         public string UserName { get; set; }
 
         [Required]
-        [StringLength(10)]
+        [StringLength(20)]
         public string UserPassword { get; set; }
 
         [Required]

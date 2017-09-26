@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { EBookService } from 'app/ebook/main/ebook.service';
 import { EBook } from 'app/ebook/main/ebook.model'
+import { User } from 'app/user/main/user.model'
+
+import { EBookService } from 'app/ebook/main/ebook.service';
+import { AuthService } from 'app/common/auth/auth.service';
 
 @Component({
   selector: 'app-ebook',
@@ -11,15 +14,12 @@ import { EBook } from 'app/ebook/main/ebook.model'
 })
 export class EBookComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
-  private eBooks:Array<EBook>;
+  currentUser:User;
+  eBooks:Array<EBook>;
 
   ngOnInit() {
+    this.currentUser = this.authService.getCurrentUser();
   }
-
-  changeState(state:string) {
-      
-  }
-
 }

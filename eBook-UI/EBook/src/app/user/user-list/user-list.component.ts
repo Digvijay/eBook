@@ -11,6 +11,8 @@ import 'rxjs/add/operator/map';
 import { User } from 'app/user/main/user.model';
 import { Category } from 'app/category/main/category.model';
 import { UserService } from 'app/user/main/user.service';
+import { AuthService } from 'app/common/auth/auth.service';
+
 
 @Component({
   selector: 'app-user-list',
@@ -26,13 +28,17 @@ export class UserListComponent implements OnInit {
 
   @ViewChild(MdPaginator) paginator: MdPaginator;
 
-  constructor(private userService: UserService, private route: ActivatedRoute) {
+  constructor(
+    private userService: UserService, 
+    private route: ActivatedRoute,
+    private authService: AuthService) {
     route.params.subscribe(val => {
       this.setInitialData();    // forces to reload component data after state change. (TODO: different impl)
     });
   }
 
   ngOnInit() {
+    this.authService.allowAccess(['admin']);
     this.setInitialData();
   }
 

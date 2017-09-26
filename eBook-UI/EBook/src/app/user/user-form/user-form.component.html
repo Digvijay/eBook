@@ -19,21 +19,29 @@
       <tr>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput [(ngModel)]="user.userName" required name="userName" minlength="2" maxlength="10" placeholder="username">
+            <input mdInput [(ngModel)]="user.userName" [readonly]="action == 'edit'" required name="userName" minlength="2" maxlength="10" placeholder="username">
           </md-form-field>
         </td>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput [(ngModel)]="user.userPassword" required name="userPassword" minlength="2" maxlength="10" placeholder="password">
+            <input mdInput [(ngModel)]="user.type" required [readonly]="activeUser.type != 'admin'" name="type" minlength="2" maxlength="30" placeholder="user type">
           </md-form-field>
         </td>
       </tr>
       <tr>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput [(ngModel)]="user.type" required name="type" minlength="2" maxlength="30" placeholder="user type">
+            <input mdInput [(ngModel)]="user.userPassword" type="password" required name="userPassword1" minlength="2" maxlength="10"
+              placeholder="password">
           </md-form-field>
         </td>
+        <td>
+          <md-form-field class="example-full-width">
+            <input mdInput [(ngModel)]="userPassword2" type="password" required name="userPassword2" minlength="2" maxlength="10" placeholder="repeat password">
+          </md-form-field>
+        </td>
+      </tr>
+      <tr>
         <td>
           <md-form-field class="example-full-width">
             <input mdInput type="text" name="category" required placeholder="category" mdInput [mdAutocomplete]="catSelect" [(ngModel)]="user.category">
@@ -50,7 +58,7 @@
           <button md-button routerLink="/users/list">Cancel</button>
         </td>
         <td>
-          <button md-button type="submit">Save</button>
+          <button md-button [disabled]="user.userPassword != userPassword2" type="submit">Save</button>
         </td>
       </tr>
     </table>

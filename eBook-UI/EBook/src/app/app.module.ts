@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MatTabsModule, MatInputModule, MatTableModule, MatPaginatorModule, MatAutocompleteModule, MatSnackBarModule } from '@angular/material';
 import { HttpModule, RequestOptions } from '@angular/http';
-import { FormsModule }   from '@angular/forms'; // <-- NgModel lives here :)
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms'; // <-- NgModel lives here :)
 import { FileDropDirective, FileSelectDirective } from 'ng2-file-upload';
 
 
@@ -34,7 +34,7 @@ import { CategoryService } from 'app/category/main/category.service';
 import { UserService } from 'app/user/main/user.service';
 import { RequestOptionsService } from 'app/common/auth/request-options.service';
 import { AuthService } from 'app/common/auth/auth.service';
-
+import { DataService} from 'app/common/services/data.service';
 
 
 const ChildRoutesEBooks = [
@@ -104,6 +104,7 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only, TODO: remove after..
@@ -127,7 +128,8 @@ const appRoutes: Routes = [
     CategoryService,
     UserService,
     { provide: RequestOptions, useClass: RequestOptionsService },
-    AuthService
+    AuthService,
+    DataService
   ],
   bootstrap: [AppComponent]
 })

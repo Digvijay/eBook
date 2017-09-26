@@ -69,6 +69,7 @@ export class CategoryService {
 
   // Update existing Category
   private put(Category: Category): Promise<Category> {
+    debugger
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 

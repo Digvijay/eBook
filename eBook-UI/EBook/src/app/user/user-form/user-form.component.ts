@@ -14,6 +14,8 @@ import { Category } from 'app/category/main/category.model';
 
 import { UserService } from 'app/user/main/user.service';
 import { CategoryService } from 'app/category/main/category.service';
+import { AuthService } from 'app/common/auth/auth.service';
+import { DataService } from 'app/common/services/data.service';
 
 @Component({
   selector: 'app-User-form',
@@ -28,14 +30,22 @@ export class UserFormComponent implements OnInit {
     private http: Http,
     private categoryService: CategoryService,
     private snackBar: MdSnackBar,
-    private route: ActivatedRoute) {  }
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private dataService: DataService) {  }
 
   id: number;
   action: string = "add";
   user: User = new User();
+  oldPwd: string;
   categories: Array<Category>;
+  userPassword2:string;
+  activeUser: User;
 
   ngOnInit() {
+    this.authService.allowAccess(['admin', 'subscriber']);
+    this.activeUser = this.authService.getCurrentUser();
+
     this.categoryService.getCategories().then(x => { this.categories = x; });
 
     if (this.route.snapshot.url[1]) {
@@ -48,6 +58,9 @@ export class UserFormComponent implements OnInit {
       if (this.id) {
           this.userService.getUser(this.id).then(x => {
             this.user = x;
+            this.user.userPassword = AuthService.b64DecodeUnicode(this.user.userPassword);
+            this.userPassword2 = this.user.userPassword;
+            this.oldPwd = this.user.userPassword;
             if (this.action == "delete") {
               this.deleteUser();
             } 
@@ -76,6 +89,15 @@ export class UserFormComponent implements OnInit {
     // else add or edit
     this.userService.save(this.user).then(x => {
       this.snackBar.open(`User ${this.user.firstName} ${this.user.lastName} sucessfuly saved.`, "Add User", { duration: 2000}).afterDismissed().subscribe(() => {
+        this.activeUser = JSON.parse(localStorage.getItem('currentUser')) as User;
+        
+        if(this.activeUser.userId == this.user.userId) {  // if current user changed it's profile data
+          if(this.oldPwd != this.user.userPassword) {
+            this.authService.setNewPassword(this.user.userPassword);
+          }
+          this.dataService.updateData(this.user);
+        }
+        
         this.router.navigate(['/users/list']);
       });
     }).catch(x => {

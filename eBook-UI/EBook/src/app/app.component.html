@@ -1,14 +1,23 @@
 <md-toolbar color="primary">
-    <span routerLink="">E-book repository</span>
-    <span class="example-spacer"></span>
-    <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
-    </md-toolbar>
-    <md-menu #appMenu="mdMenu">
-      <button md-menu-item routerLink="/ebooks/list"> EBooks </button>
-      <button md-menu-item routerLink="/users/list"> Users </button>
-      <button md-menu-item routerLink="/categories/list"> Categories </button>
-      <button md-menu-item routerLink="/languages/list"> Languages </button>      
+  <div (changedUserData)="foo($event)"></div>
+  <span routerLink="">E-book repository</span>
+  <span class="example-spacer"></span>
+  <div *ngIf="!currentUser;then log_in else log_out"></div>
+  <ng-template #log_in>
+      <button md-button routerLink="/login">Log in</button>      
+  </ng-template>
+  <ng-template #log_out>
+      <span style="font-size:80%"><b>{{currentUser.firstName}} {{currentUser.lastName}} | {{currentUser.type}}</b></span>
+      <button md-button [routerLink]="['/users', currentUser.userId, 'edit']">Profile settings</button>      
+      <button md-button (click)="authService.logOut()">Log out</button>      
+  </ng-template>
+  <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>  
+  <md-menu #appMenu="mdMenu">
+    <button md-menu-item routerLink="/ebooks/list"> EBooks </button>
+    <button *ngIf="currentUser" md-menu-item routerLink="/users/list"> Users </button>
+    <button *ngIf="currentUser" md-menu-item routerLink="/categories/list"> Categories </button>
+    <button *ngIf="currentUser" md-menu-item routerLink="/languages/list"> Languages </button>
   </md-menu>
+</md-toolbar>
+
 <router-outlet></router-outlet>
-
-

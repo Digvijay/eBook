@@ -12,23 +12,30 @@ namespace eBook.Services
     public class AuthService
     {
         private static EBookDbContext db = new EBookDbContext();
-        public static string SALT = "123";
 
         public static User Login(string username, string password)
         {
-            var pwd = GetEncodedHash(password, SALT);
-            var signedInUser = db.Users.Where(x => x.UserName == username && x.UserPassword == pwd).First();
-            signedInUser.UserPassword = password;
+            var pwd = Base64Encode(password);
+            var signedInUser = db.Users.SingleOrDefault(x => x.UserName == username && x.UserPassword == pwd);
+
+            if (signedInUser != null)
+            {
+                signedInUser.UserPassword = password;
+            }
 
             return signedInUser;
         }
 
-        public static string GetEncodedHash(string password, string salt)
+        public static string Base64Encode(string plainText)
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] digest = md5.ComputeHash(Encoding.UTF8.GetBytes(password + salt));
-            string base64digest = Convert.ToBase64String(digest, 0, digest.Length);
-            return base64digest.Substring(0, 10);
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

@@ -16,7 +16,6 @@ using eBook.Services;
 
 namespace eBook.Controllers
 {
-    [BasicAuthentication]
     public class UsersController : ApiController
     {
         private EBookDbContext db = new EBookDbContext();
@@ -54,10 +53,14 @@ namespace eBook.Controllers
             {
                 return BadRequest();
             }
+            User existingUser = db.Users.AsNoTracking().SingleOrDefault(x => x.UserId == id);
+
+            if (existingUser.UserPassword != user.UserPassword)
+            {
+                SetUserPassword(user);
+            }
 
             db.Entry(user).State = EntityState.Modified;
-
-            SetUserPassword(user);
 
             try
             {
@@ -97,7 +100,7 @@ namespace eBook.Controllers
 
         private void SetUserPassword(User user)
         {
-            user.UserPassword = AuthService.GetEncodedHash(user.UserPassword, AuthService.SALT);
+            user.UserPassword = AuthService.Base64Encode(user.UserPassword);
         }
 
         // DELETE: api/Users/5

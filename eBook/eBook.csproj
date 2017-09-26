@@ -212,6 +212,10 @@
     <Compile Include="Migrations\201709251552281_uniqueUsername.Designer.cs">
       <DependentUpon>201709251552281_uniqueUsername.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709261818443_extendedpasswordlength.cs" />
+    <Compile Include="Migrations\201709261818443_extendedpasswordlength.Designer.cs">
+      <DependentUpon>201709261818443_extendedpasswordlength.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\EBook.cs" />
@@ -291,6 +295,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709251552281_uniqueUsername.resx">
       <DependentUpon>201709251552281_uniqueUsername.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709261818443_extendedpasswordlength.resx">
+      <DependentUpon>201709261818443_extendedpasswordlength.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

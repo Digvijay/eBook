@@ -81,6 +81,16 @@ export class EBookService {
       .catch(this.handleError);
   }
 
+  filter(expression: string) {
+    return this.http
+    .get(ServerURI + this.eBooksUrl + "$filter=" + expression, this.opts)
+    .toPromise()
+    .then((response) => {
+      return response.json() as Array<EBook>[];
+    })
+    .catch(this.handleError);
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);

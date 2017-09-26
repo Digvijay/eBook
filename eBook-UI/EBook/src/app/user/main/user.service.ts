@@ -16,8 +16,7 @@ export class UserService {
   private UsersUrl = 'api/users/';  // URL to web api
   private headers = new Headers({'Content-Type': 'application/json', 'Accept': 'application/json'});
   private opts:RequestOptions = new RequestOptions();
-  
-  
+
   getUsers(): Promise<Array<User>> {
     this.opts.headers = this.headers;
     
@@ -35,11 +34,13 @@ export class UserService {
       .then(Users => Users.find(User => User.userId === id));
   }
 
-  save(User: User): Promise<User> {
-    if (User.userId) {
-      return this.put(User);
+  save(user: User): Promise<User> {
+    user.categoryId = user.category.categoryId;
+    
+    if (user.userId) {
+      return this.put(user);
     }
-    return this.post(User);
+    return this.post(user);
   }
 
   delete(userId: number): Promise<Response> {

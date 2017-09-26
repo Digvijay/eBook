@@ -18,6 +18,7 @@ import { EBookService } from 'app/ebook/main/ebook.service';
 import { LanguageService } from 'app/language/main/language.service';
 import { CategoryService } from 'app/category/main/category.service';
 import { UserService } from 'app/user/main/user.service';
+import { AuthService } from 'app/common/auth/auth.service';
 
 @Component({
   selector: 'app-ebook-form',
@@ -34,6 +35,7 @@ export class EBookFormComponent implements OnInit {
     private router: Router,
     private http: Http,
     private snackBar: MdSnackBar,
+    private authService: AuthService,
     private route: ActivatedRoute) { 
 
     }
@@ -46,6 +48,8 @@ export class EBookFormComponent implements OnInit {
   users: Array<User>;
 
   ngOnInit() {
+    this.authService.allowAccess(['admin']);
+
     this.languageService.getLanguages().then(x => { this.languages = x; });
     this.categoryService.getCategories().then(x => { this.categories = x; });
     this.userService.getUsers().then(x => { this.users = x; });
@@ -76,7 +80,6 @@ export class EBookFormComponent implements OnInit {
   }
 
   fileChange(event) {
-    debugger;
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];
@@ -114,7 +117,7 @@ export class EBookFormComponent implements OnInit {
   submit(data) {
     this.eBook.categoryId = this.eBook.category.categoryId;
     this.eBook.languageId = this.eBook.language.languageId;
-    this.eBook.userId = this.eBook.user.userId;
+    this.eBook.userId = this.authService.getCurrentUser().userId;
     
     // else add or edit
     this.eBook.keywords = "TODO: get from lucene.net";

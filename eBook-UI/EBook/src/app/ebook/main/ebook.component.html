@@ -2,6 +2,6 @@
   <span>EBooks</span>
 </md-toolbar>
 <button md-button routerLink="list">List all</button>
-<button md-button routerLink="add">Add new</button>
+<button md-button *ngIf="currentUser && currentUser.type == 'admin'" routerLink="add">Add new</button>
 
 <router-outlet></router-outlet>

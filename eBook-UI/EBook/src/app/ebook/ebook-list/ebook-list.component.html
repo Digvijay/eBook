@@ -1,9 +1,15 @@
-
 <md-card>
-  <md-card-header>
-      <span>List of books</span>
-  </md-card-header>
-    <span>
+  <md-toolbar>
+      <md-form-field class="demo-full-width">
+          <input mdInput (autocompleteOnSelect)="filterByCategory($event)" type="text" name="category" placeholder="Select category" mdInput [mdAutocomplete]="catSelect" [formControl]="formCtrl" [(ngModel)]="selectedCategory">
+          <md-autocomplete id="categories" #catSelect="mdAutocomplete" [displayWith]="displaySelectCategoryFun">
+            <md-option *ngFor="let category of filteredCategories" [value]="category" (onSelectionChange)="filterByCategory($event)">
+              {{ category.categoryName }}
+            </md-option>
+          </md-autocomplete>
+        </md-form-field>
+  </md-toolbar>
+  <span>
         <md-table #table [dataSource]="dataSource">
       
           <ng-container mdColumnDef="eBookId">
@@ -40,8 +46,7 @@
             <md-header-cell *mdHeaderCellDef> mime </md-header-cell>
             <md-cell *mdCellDef="let element"> {{element.mime}} </md-cell>
           </ng-container>
-      
-          <ng-container mdColumnDef="edit">
+          <ng-container *ngIf="currentUser && currentUser.type=='admin'" mdColumnDef="edit">
               <md-header-cell *mdHeaderCellDef> EDIT </md-header-cell>
               <md-cell *mdCellDef="let element"> 
                 <a [routerLink]="['/ebooks', element.eBookId, 'edit']">edit</a> | 
