@@ -82,6 +82,7 @@ export class EBookFormComponent implements OnInit {
   fileChange(event) {
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
+      debugger
       let file: File = fileList[0];
       this.eBook.fileName = file.name;
       this.eBook.mime = file.type;
@@ -96,7 +97,7 @@ export class EBookFormComponent implements OnInit {
       this.http.post(apiUrl1, formData, options)
         .catch(error => Observable.throw(error))
         .subscribe(
-          data => { this.snackBar.open(`File ${this.eBook.fileName} sucessfuly uploaded.`, "File upload", { duration: 2000}); },
+          data => { this.setMetadata(JSON.parse(data._body)); this.snackBar.open(`File ${this.eBook.fileName} sucessfuly uploaded.`, "File upload", { duration: 2000}); },
           error => { console.log(error); }
         )
     }
@@ -112,6 +113,12 @@ export class EBookFormComponent implements OnInit {
 
   displaySelectUserFun(user: User) {
     return (user) ? user.firstName + " " + user.lastName : user;
+  }
+
+  setMetadata(metadata) {
+    this.eBook.title = metadata.title;
+    this.eBook.keywords = metadata.keywords;
+    this.eBook.author = metadata.author;
   }
 
   submit(data) {
