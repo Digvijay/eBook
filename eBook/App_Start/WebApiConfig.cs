@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eBook.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -15,7 +16,9 @@ namespace eBook
             config.EnableCors(cors);
 
             // Web API routes
-            config.MapHttpAttributeRoutes();
+            //config.MapHttpAttributeRoutes();
+
+            //config.Services.Add(typeof(ILuceneService), new LuceneService());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

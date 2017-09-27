@@ -12,7 +12,13 @@ export class DataService {
     }
 
     updateData(data: any) {
-        localStorage.setItem('currentUser', JSON.stringify(data as User));
-        this.dataObs$.next(data);
+        if(data) {
+            localStorage.setItem('currentUser', JSON.stringify(data as User));
+            this.dataObs$.next(data);
+        } else {
+            localStorage.removeItem('currentUser');
+            this.dataObs$.next(null);
+        }
+
     }
 }

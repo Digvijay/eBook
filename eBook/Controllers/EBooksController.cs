@@ -15,6 +15,7 @@ using System.Web.Http.OData;
 using System.IO;
 using Newtonsoft.Json;
 using eBook.CustomAttributes.BasicAuthenticationAttribute;
+using eBook.Services;
 
 namespace eBook.Controllers
 {
@@ -88,6 +89,8 @@ namespace eBook.Controllers
 
             db.EBooks.Add(eBook);
             db.SaveChanges();
+
+            LuceneService.RegisterNewLuceneDoc(eBook);
 
             return CreatedAtRoute("DefaultApi", new { id = eBook.EBookId }, eBook);
         }

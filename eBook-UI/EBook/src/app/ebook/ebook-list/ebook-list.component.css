@@ -22,5 +22,9 @@ a {
 }
 
 .demo-full-width {
-  width: 40%;
+  width: 30%;
+}
+
+.auto-width {
+  width: 100%;
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿using eBook.Services;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace eBook
             HttpConfiguration config = GlobalConfiguration.Configuration;
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             config.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+
+            var initIndexing = new LuceneService();
         }
     }
 }

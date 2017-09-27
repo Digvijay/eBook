@@ -35,7 +35,6 @@ export class AuthService implements OnInit {
     return this.http.post(`${ServerURI}api/auth`, JSON.stringify({ userName: username, userPassword: password }), this.options).map((response: Response) => {
       if (response.status == 200) {
         this.currentUser = response.json() as User;
-        localStorage.setItem("currentUser", JSON.stringify(this.currentUser));
       } else if (response.status == 401) { 
         // unauthorized..
       }
@@ -48,8 +47,8 @@ export class AuthService implements OnInit {
   }
 
   logOut() {
-    localStorage.removeItem('currentUser');
-    this.dataService.updateData(null);
+    this.currentUser = null;
+    this.dataService.updateData(this.currentUser);
     this.router.navigate(['/login']);
   }
 

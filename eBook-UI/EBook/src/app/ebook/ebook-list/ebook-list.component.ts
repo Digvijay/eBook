@@ -33,9 +33,13 @@ export class EBookListComponent implements OnInit {
   dataChange: BehaviorSubject<IEBook[]> = new BehaviorSubject<IEBook[]>([]);
   dataSource: ExampleDataSource | null;
   displayedColumns = Array<string>();
+  searchFields = Array<string>();
+  searchResult = Array<EBook>();
   currentUser: User;
   selectedCategory: Category;
   formCtrl = new FormControl();
+  searchQuery: string;
+  searchField: string;
 
   @ViewChild(MdPaginator) paginator: MdPaginator;
 
@@ -63,6 +67,7 @@ export class EBookListComponent implements OnInit {
       });
     });    
 
+    this.searchFields = ['title', 'content', 'keywords', 'author', 'language'];
     this.authService.allowAccess(['admin', 'subscriber', 'guest']);
     this.displayedColumns = ['eBookId', 'title', 'author', 'language', 'file name', 'category', 'mime', 'download'];
 
@@ -117,6 +122,19 @@ export class EBookListComponent implements OnInit {
 
   displaySelectCategoryFun(category: Category) {
     return (category) ? category.categoryName : category;
+  }
+
+  search() {
+    this.http.get(`${ ServerURI }/api/search?query=${ this.searchQuery }&searchField=${ this.searchField }`).subscribe(result => {
+        this.searchResult = result.json() as Array<EBook>;
+        this.dataChange.next(this.searchResult);
+    });
+  }
+
+  resetSearch() {
+    this.dataChange.next(this.eBooks);
+    this.searchField = null;
+    this.searchQuery = null;
   }
 
 }

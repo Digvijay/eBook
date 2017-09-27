@@ -1,13 +1,34 @@
 <md-card>
   <md-toolbar>
-      <md-form-field class="demo-full-width">
-          <input mdInput (autocompleteOnSelect)="filterByCategory($event)" type="text" name="category" placeholder="Select category" mdInput [mdAutocomplete]="catSelect" [formControl]="formCtrl" [(ngModel)]="selectedCategory">
-          <md-autocomplete id="categories" #catSelect="mdAutocomplete" [displayWith]="displaySelectCategoryFun">
-            <md-option *ngFor="let category of filteredCategories" [value]="category" (onSelectionChange)="filterByCategory($event)">
-              {{ category.categoryName }}
-            </md-option>
-          </md-autocomplete>
-        </md-form-field>
+    <form class="demo-full-width">
+      <md-form-field class="auto-width">
+        <input mdInput (autocompleteOnSelect)="filterByCategory($event)" type="text" name="category" placeholder="Select category"
+          mdInput [mdAutocomplete]="catSelect" [formControl]="formCtrl" [(ngModel)]="selectedCategory">
+        <md-autocomplete id="categories" #catSelect="mdAutocomplete" [displayWith]="displaySelectCategoryFun">
+          <md-option *ngFor="let category of filteredCategories" [value]="category" (onSelectionChange)="filterByCategory($event)">
+            {{ category.categoryName }}
+          </md-option>
+        </md-autocomplete>
+      </md-form-field>
+    </form>
+    <form style="width:100%">
+      <img src="assets/img/search.png" width="4%" height="50%" />
+      <md-form-field style="width:45%">
+        <input mdInput [(ngModel)]="searchQuery" name="searchQuery" placeholder="Search text" type="text">
+      </md-form-field>
+      <span>&nbsp;&nbsp;</span>
+      <md-form-field style="width:20%">
+        <input mdInput (autocompleteOnSelect)="searchByField($event)" type="text" name="searchField" placeholder="Select search field"
+          mdInput [mdAutocomplete]="fieldSelect" [formControl]="formCtrl" [(ngModel)]="searchField">
+        <md-autocomplete id="categories" #fieldSelect="mdAutocomplete">
+          <md-option *ngFor="let searchField of searchFields" [value]="searchField">
+            {{ searchField }}
+          </md-option>
+        </md-autocomplete>
+      </md-form-field>
+      <button md-button style="width:15%" (click)="search()" type="submit" color="primary">Search</button>
+      <button md-button style="width:10%" (click)="resetSearch()">Reset</button>
+    </form>
   </md-toolbar>
   <span>
         <md-table #table [dataSource]="dataSource">
@@ -49,7 +70,7 @@
           
           <ng-container mdColumnDef="download">
               <md-header-cell *mdHeaderCellDef> download </md-header-cell>
-              <md-cell *mdCellDef="let element"> <button md-button [disabled]="!currentUser || currentUser.category.categoryId != element.category.categoryId" (click)="downloadFile(element.eBookId)">{{(!currentUser) ? 'Register to download' : 'Download'}}</button></md-cell>
+              <md-cell *mdCellDef="let element"> <button md-button [disabled]="!currentUser || ((currentUser.type != 'admin' && currentUser.category.categoryName != 'ALL') && currentUser.category.categoryId != element.category.categoryId)" (click)="downloadFile(element.eBookId)">{{(!currentUser) ? 'Register to download' : 'Download'}}</button></md-cell>
           </ng-container>
 
           <ng-container *ngIf="currentUser && currentUser.type=='admin'" mdColumnDef="edit">
