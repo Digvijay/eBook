@@ -16,7 +16,7 @@ namespace eBook
             config.EnableCors(cors);
 
             // Web API routes
-            //config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes();
 
             //config.Services.Add(typeof(ILuceneService), new LuceneService());
 
