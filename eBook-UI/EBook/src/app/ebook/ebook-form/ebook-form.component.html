@@ -30,7 +30,7 @@
             <input mdInput type="text" name="category" required placeholder="Category" mdInput [mdAutocomplete]="catSelect" [(ngModel)]="eBook.category">
             <md-autocomplete id="categories" #catSelect="mdAutocomplete" [displayWith]="displaySelectCategoryFun">
               <md-option *ngFor="let category of categories" [value]="category">
-                {{ category.categoryName }}
+                {{ (category.categoryName) ? category.categoryName : '' }}
               </md-option>
             </md-autocomplete>
           </md-form-field>

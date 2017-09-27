@@ -1,9 +1,10 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Http } from '@angular/http';
 import { DataSource } from '@angular/cdk/collections';
-import { MdPaginator } from '@angular/material';
+import { MdPaginator, MatSnackBar } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -12,6 +13,8 @@ import 'rxjs/add/operator/map';
 import { EBook } from 'app/ebook/main/ebook.model';
 import { User } from 'app/user/main/user.model';
 import { Category } from 'app/category/main/category.model';
+
+import { ServerURI } from 'app/app.globals';
 
 import { EBookService } from 'app/ebook/main/ebook.service';
 import { AuthService } from 'app/common/auth/auth.service';
@@ -40,6 +43,8 @@ export class EBookListComponent implements OnInit {
     private eBookService: EBookService, 
     private route: ActivatedRoute,
     private authService: AuthService,
+    private http: Http,
+    private snackBar: MatSnackBar,
     private categoryService: CategoryService) {
     route.params.subscribe(val => {
       this.setInitialData();    // forces to reload component data after state change. (TODO: different impl)
@@ -59,7 +64,7 @@ export class EBookListComponent implements OnInit {
     });    
 
     this.authService.allowAccess(['admin', 'subscriber', 'guest']);
-    this.displayedColumns = ['eBookId', 'title', 'author', 'language', 'file name', 'category', 'mime'];
+    this.displayedColumns = ['eBookId', 'title', 'author', 'language', 'file name', 'category', 'mime', 'download'];
 
     if(this.currentUser) {
       if(this.currentUser.type == 'admin') {
@@ -76,6 +81,25 @@ export class EBookListComponent implements OnInit {
     });
 
     this.dataSource = new ExampleDataSource(this, this.paginator);
+  }
+
+  downloadDisabled(element, currentUser) : boolean {
+    if(currentUser) {
+      if(currentUser.category.categoryName == element.category.categoryName || currentUser.category.categoryName == 'ALL') {
+        return true;
+      }    
+    }
+    return false;
+  }
+
+  downloadFile(eBookId: number) {
+    this.eBookService.getEBook(eBookId).then(x => {
+      let currentEbook = x;
+      let fileName = currentEbook.fileName;
+
+      var noExtFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+      window.open(ServerURI + "api/file/download/" + noExtFileName);
+    });
   }
 
   getEBooks(callback): void {

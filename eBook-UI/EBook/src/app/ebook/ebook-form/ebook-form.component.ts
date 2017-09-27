@@ -92,7 +92,7 @@ export class EBookFormComponent implements OnInit {
 
       let headers = new Headers()
       let options = new RequestOptions({ headers: headers });
-      let apiUrl1 = ServerURI + "api/fileupload";
+      let apiUrl1 = ServerURI + "api/file/upload";
 
       this.http.post(apiUrl1, formData, options)
         .catch(error => Observable.throw(error))
@@ -125,9 +125,7 @@ export class EBookFormComponent implements OnInit {
     this.eBook.categoryId = this.eBook.category.categoryId;
     this.eBook.languageId = this.eBook.language.languageId;
     this.eBook.userId = this.authService.getCurrentUser().userId;
-    
-    // else add or edit
-    this.eBook.keywords = "TODO: get from lucene.net";
+
     this.eBookService.save(this.eBook).then(x => {
       this.snackBar.open(`Book ${this.eBook.title} sucessfuly saved.`, "Add book", { duration: 2000}).afterDismissed().subscribe(() => {
         console.log(x);

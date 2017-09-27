@@ -48,7 +48,7 @@ namespace eBook.Migrations
 
                 foreach (var user in users)
                 {
-                    user.Category = categories[new Random(DateTime.Now.Millisecond).Next(0, categories.Count)];
+                    user.Category = categories[random.Next(0, categories.Count)];
                     user.Type = "subscriber";
 
                     user.UserPassword = AuthService.Base64Encode("1234");

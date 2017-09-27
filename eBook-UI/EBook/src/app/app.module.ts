@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MatTabsModule, MatInputModule, MatTableModule, MatPaginatorModule, MatAutocompleteModule, MatSnackBarModule } from '@angular/material';
+import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MatTabsModule, MatInputModule, MatTableModule, MatPaginatorModule, MatAutocompleteModule, MatSnackBarModule, MatTooltipModule } from '@angular/material';
 import { HttpModule, RequestOptions } from '@angular/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms'; // <-- NgModel lives here :)
 import { FileDropDirective, FileSelectDirective } from 'ng2-file-upload';
@@ -120,7 +120,8 @@ const appRoutes: Routes = [
     MatTableModule,
     MatPaginatorModule,
     MatAutocompleteModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   providers: [
     EBookService, 

@@ -14,9 +14,9 @@
   <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>  
   <md-menu #appMenu="mdMenu">
     <button md-menu-item routerLink="/ebooks/list"> EBooks </button>
-    <button *ngIf="currentUser" md-menu-item routerLink="/users/list"> Users </button>
-    <button *ngIf="currentUser" md-menu-item routerLink="/categories/list"> Categories </button>
-    <button *ngIf="currentUser" md-menu-item routerLink="/languages/list"> Languages </button>
+    <button *ngIf="currentUser && currentUser.type == 'admin'" md-menu-item routerLink="/users/list"> Users </button>
+    <button *ngIf="currentUser && currentUser.type == 'admin'" md-menu-item routerLink="/categories/list"> Categories </button>
+    <button *ngIf="currentUser && currentUser.type == 'admin'" md-menu-item routerLink="/languages/list"> Languages </button>
   </md-menu>
 </md-toolbar>
 

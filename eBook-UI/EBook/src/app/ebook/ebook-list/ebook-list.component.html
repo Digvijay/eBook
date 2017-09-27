@@ -46,6 +46,12 @@
             <md-header-cell *mdHeaderCellDef> mime </md-header-cell>
             <md-cell *mdCellDef="let element"> {{element.mime}} </md-cell>
           </ng-container>
+          
+          <ng-container mdColumnDef="download">
+              <md-header-cell *mdHeaderCellDef> download </md-header-cell>
+              <md-cell *mdCellDef="let element"> <button md-button [disabled]="!currentUser || currentUser.category.categoryId != element.category.categoryId" (click)="downloadFile(element.eBookId)">{{(!currentUser) ? 'Register to download' : 'Download'}}</button></md-cell>
+          </ng-container>
+
           <ng-container *ngIf="currentUser && currentUser.type=='admin'" mdColumnDef="edit">
               <md-header-cell *mdHeaderCellDef> EDIT </md-header-cell>
               <md-cell *mdCellDef="let element"> 
