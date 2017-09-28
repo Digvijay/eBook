@@ -62,6 +62,7 @@ namespace eBook.Controllers
             try
             {
                 db.SaveChanges();
+                LuceneService.UpdateLuceneDoc(eBook);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -107,6 +108,8 @@ namespace eBook.Controllers
 
             db.EBooks.Remove(eBook);
             db.SaveChanges();
+
+            LuceneService.DeleteLuceneDoc(eBook);
 
             return Ok(eBook);
         }

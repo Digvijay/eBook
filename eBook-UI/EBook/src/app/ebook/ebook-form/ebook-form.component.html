@@ -1,9 +1,9 @@
 <md-card>
-    <md-card-title>
-        <span>{{action}}</span>
-      </md-card-title>
+  <md-card-title>
+    <span>{{action}}</span>
+  </md-card-title>
   <form>
-      <input type="file" id="btnUpload" value="Upload" (change)="fileChange($event)" accept=".pdf" class="upload" />  
+    <input type="file" id="btnUpload" value="Upload" (change)="fileChange($event)" accept=".pdf" class="upload" />
   </form>
   <form #values="ngForm" (ngSubmit)="submit(values)" class="example-form">
     <md-form-field class="example-full-width">
@@ -19,8 +19,18 @@
         </td>
         <td>
           <md-form-field class="example-full-width">
-            <input mdInput [(ngModel)]="eBook.publicationYear" required name="publicationYear" placeholder="Publication year" type="number" minlength="2"
-              maxlength="4">
+            <input mdInput [(ngModel)]="eBook.publicationYear" required name="publicationYear" placeholder="Publication year" type="number"
+              minlength="2" maxlength="4">
+          </md-form-field>
+        </td>
+        <td [hidden]="true">
+          <md-form-field class="example-full-width">
+            <input mdInput type="text" name="user" required placeholder="Added by" mdInput [mdAutocomplete]="userSelect" [(ngModel)]="eBook.user">
+            <md-autocomplete id="categories" #userSelect="mdAutocomplete" [displayWith]="displaySelectUserFun">
+              <md-option *ngFor="let user of users" [value]="user">
+                {{ user.firstName + ' ' + user.lastName }}
+              </md-option>
+            </md-autocomplete>
           </md-form-field>
         </td>
       </tr>

@@ -116,15 +116,24 @@ export class EBookFormComponent implements OnInit {
   }
 
   setMetadata(metadata) {
-    this.eBook.title = metadata.title;
-    this.eBook.keywords = metadata.keywords;
-    this.eBook.author = metadata.author;
+    if(metadata.title) {
+      this.eBook.title = metadata.title;
+    }
+    if(metadata.keywords) {
+      this.eBook.keywords = metadata.keywords;
+    }
+    if(metadata.author) {
+      this.eBook.author = metadata.author;
+    }
   }
 
   submit(data) {
     this.eBook.categoryId = this.eBook.category.categoryId;
     this.eBook.languageId = this.eBook.language.languageId;
-    this.eBook.userId = this.authService.getCurrentUser().userId;
+    debugger
+    if(!this.eBook.user) {  // add new
+      this.eBook.userId = this.authService.getCurrentUser().userId;
+    }
 
     this.eBookService.save(this.eBook).then(x => {
       this.snackBar.open(`Book ${this.eBook.title} sucessfuly saved.`, "Add book", { duration: 2000}).afterDismissed().subscribe(() => {

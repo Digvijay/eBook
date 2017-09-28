@@ -1,6 +1,5 @@
 ﻿using eBook.Database;
 using eBook.Models;
-using iTextSharp.text.pdf;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
@@ -8,49 +7,46 @@ using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace eBook.Services
 {
     public class LuceneService
     {
+        private static string indexPath = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/Lucene/Index");
+
         private static EBookDbContext db = new EBookDbContext();
-        private static RAMDirectory directory = new RAMDirectory(); // In memory index
+        private static Directory directory; // In memory index
+        private static Analyzer analyzer;
+        private static IndexWriter writer;
 
         private static PDFDocService pdfDocService = new PDFDocService();
 
         static LuceneService()
         {
-            directory = CreateIndex() as RAMDirectory;
+            directory = FSDirectory.Open(indexPath);
+            analyzer= new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
+            writer = new IndexWriter(directory, analyzer, true, new IndexWriter.MaxFieldLength(1000));
+
+            if (!directory.FileExists(indexPath))
+            {
+                CreateIndex(directory);
+            }
         }
 
-        private static Directory CreateIndex()
+        private static void CreateIndex(Directory directory)
         {
-            using (Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
-            using (var writer = new IndexWriter(directory, analyzer, new IndexWriter.MaxFieldLength(1000)))
-            { // the writer and analyzer will popuplate the directory with docuemnts
+            db.EBooks.ToList().ForEach(eBook => {
+                var doc = new Document();
+                doc = SetDocumentFields(eBook);
 
-                db.EBooks.ToList().ForEach(eBook => {
-                    var doc = new Document();
+                writer.AddDocument(doc);
+            });
 
-                    doc.Add(new Field("eBookId", eBook.EBookId.ToString(), Field.Store.YES, Field.Index.ANALYZED));
-                    doc.Add(new Field("title", eBook.Title, Field.Store.YES, Field.Index.ANALYZED));
-                    doc.Add(new Field("author", eBook.Author, Field.Store.YES, Field.Index.ANALYZED));
-                    doc.Add(new Field("keywords", eBook.Keywords, Field.Store.YES, Field.Index.ANALYZED));
-                    doc.Add(new Field("language", eBook.Language.LanguageName, Field.Store.YES, Field.Index.ANALYZED));
-                    doc.Add(new Field("content", "empty seed content...", Field.Store.YES, Field.Index.ANALYZED));
-
-                    writer.AddDocument(doc);
-                });
-
-                writer.Optimize();
-                writer.Flush(true, true, true);
-            }
-
-            return directory;
+            writer.Commit();
+            writer.Optimize();
+            writer.Flush(true, true, true);
         }
 
         /// <summary>
@@ -65,7 +61,6 @@ namespace eBook.Services
         {
             var pks = new List<string>();// list of primary key matches
 
-            using (var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
             using (var reader = IndexReader.Open(directory, true))
             using (var searcher = new IndexSearcher(reader))
             {
@@ -100,26 +95,67 @@ namespace eBook.Services
 
         public static void RegisterNewLuceneDoc(EBook eBook)
         {
-            using (Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30))
-            using (var writer = new IndexWriter(directory, analyzer, new IndexWriter.MaxFieldLength(1000)))
-            { // the writer and analyzer will popuplate the directory with docuemnts
-                var doc = new Document();
+            var doc = new Document();
+            doc = SetDocumentFields(eBook);
+            writer.AddDocument(doc);
 
-                doc.Add(new Field("eBookId", eBook.EBookId.ToString(), Field.Store.YES, Field.Index.ANALYZED));
-                doc.Add(new Field("title", eBook.Title, Field.Store.YES, Field.Index.ANALYZED));
-                doc.Add(new Field("author", eBook.Author, Field.Store.YES, Field.Index.ANALYZED));
-                doc.Add(new Field("keywords", eBook.Keywords, Field.Store.YES, Field.Index.ANALYZED));
-                doc.Add(new Field("language", eBook.Language.LanguageName, Field.Store.YES, Field.Index.ANALYZED));
+            writer.Optimize();
+            writer.Flush(true, true, true);
+            writer.Commit();
+        }
 
-                var pdfFilePath = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/Uploads/" + eBook.FileName);
-                var pdfContent = pdfDocService.ReadPDFFile(pdfFilePath);
+        public static void UpdateLuceneDoc(EBook eBook)
+        {
+            DeleteLuceneDoc(eBook);
 
-                doc.Add(new Field("content", pdfContent, Field.Store.YES, Field.Index.ANALYZED));
+            var doc = new Document();
+            doc = SetDocumentFields(eBook);
+            writer.AddDocument(doc);
+            writer.Commit();
+        }
 
-                writer.AddDocument(doc);
+        public static void DeleteLuceneDoc(EBook eBook)
+        {
+            writer.DeleteDocuments(new Term("eBookId", eBook.EBookId.ToString()));
+            writer.Commit();
+        }
 
-                writer.Optimize();
-                writer.Flush(true, true, true);
+        private static Document SetDocumentFields(EBook eBook)
+        {
+            var doc = new Document();
+
+            doc.Add(new Field("eBookId", eBook.EBookId.ToString(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("title", eBook.Title, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("author", eBook.Author, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("keywords", eBook.Keywords, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("language", eBook.Language.LanguageName, Field.Store.YES, Field.Index.ANALYZED));
+
+            var pdfFilePath = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/Uploads/" + eBook.FileName);
+            var pdfContent = "initial seed content. no pdf content sorry.. :)";
+
+            if (System.IO.File.Exists(pdfFilePath))
+            {
+                pdfContent = pdfDocService.ReadPDFFile(pdfFilePath);
+            }
+
+            doc.Add(new Field("content", pdfContent, Field.Store.YES, Field.Index.ANALYZED));
+
+            return doc;
+        }
+
+        private static void InitLuceneServices(StandardAnalyzer analyzer, IndexWriter writer)
+        {
+            try
+            {
+                analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
+                writer = new IndexWriter(directory, analyzer, true, new IndexWriter.MaxFieldLength(1000));
+            }
+            catch (LockObtainFailedException ex)
+            {
+                directory = FSDirectory.Open(indexPath);
+                IndexWriter.Unlock(directory);
+
+                writer = new IndexWriter(directory, new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30), new IndexWriter.MaxFieldLength(1000));
             }
         }
     }

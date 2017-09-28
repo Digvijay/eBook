@@ -134,6 +134,7 @@ export class EBookListComponent implements OnInit {
   resetSearch() {
     this.dataChange.next(this.eBooks);
     this.searchField = null;
+    this.selectedCategory = null;
     this.searchQuery = null;
   }
 
